@@ -17,15 +17,15 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(CsrfException.class)
     public String csrfExceptionHandler(CsrfException ex, RedirectAttributes redirectAttributes){
-        log.warn("CSRf validation failed",ex.getMessage());
-        redirectAttributes.addFlashAttribute("message","Session expired,Please login again");
-    return"redirect/login";
+        log.warn("CSRF validation failed: {}", ex.getMessage());
+        redirectAttributes.addFlashAttribute("message","Session expired. Please login again.");
+        return "redirect:/login";
     }
 
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public String genericExceptionHandler(Exception ex){
-        log.error("CSRf validation failed",ex.getMessage());
+        log.error("Unhandled exception", ex);
         return "500";
     }
 }

@@ -20,6 +20,7 @@ public class SpringConfig {
             "/error"
     };
 
+    @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http){
         http.authorizeHttpRequests(auth -> auth
                 .requestMatchers(PUBLIC_PATH).permitAll()
@@ -31,7 +32,7 @@ public class SpringConfig {
                         .defaultSuccessUrl("/dashboard",true)
                         .permitAll())
                 .logout(logout -> logout
-                        .logoutSuccessUrl("login?logout")
+                        .logoutSuccessUrl("/login?logout")
                         .permitAll());
        return http.build();
     }
