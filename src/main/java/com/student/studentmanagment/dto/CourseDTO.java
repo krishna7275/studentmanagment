@@ -3,6 +3,7 @@ package com.student.studentmanagment.dto;
 import jakarta.persistence.Column;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 import java.math.BigDecimal;
@@ -22,11 +23,22 @@ public class CourseDTO {
     @NotBlank(message = "Course duration is required")
     private String duration;
 
-    @NotBlank(message = "Course fee is required")
+    @NotNull(message = "Course fee is required")
     private BigDecimal fee;
 
     @Size(max=500, message = "Max of 500 character allowed")
     private String description;
+
+    private boolean active;
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
 
     public Long getId() {
         return id;

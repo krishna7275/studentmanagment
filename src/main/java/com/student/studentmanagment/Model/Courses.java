@@ -32,6 +32,12 @@ public class Courses {
     @Column(nullable = false,updatable = false)
     private LocalDateTime createdAt;
 
+    @PrePersist
+    public void onCreate(){
+        createdAt = LocalDateTime.now();
+
+    }
+
     public Long getId() {
         return id;
     }
