@@ -1,36 +1,27 @@
-package com.student.studentmanagment.Model;
+package com.student.studentmanagment.dto;
 
-import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
-import java.time.LocalDateTime;
+public class StudentDTO {
 
-@Entity
-@Table(name = "students")
-public class Students {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @NotBlank(message = "First name is Required")
     private String firstName;
 
-    @Column(nullable = false)
+    @NotBlank(message = "Last name is Required")
     private String lastName;
 
-    @Column(nullable = false,unique = true)
+    @NotBlank(message = "Email is Required")
     private String email;
 
     private String phoneNumber;
 
-    @Column(length = 500)
+    @Size(max = 500, message = "Address must be within 500 characters")
     private String address;
 
-    @Column(name = "active",nullable = false)
     private boolean active = true;
-
-    @Column(nullable = false,updatable = false)
-    private LocalDateTime createdAt;
 
     public Long getId() {
         return id;
@@ -88,11 +79,4 @@ public class Students {
         this.active = active;
     }
 
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
 }
