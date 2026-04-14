@@ -1,13 +1,18 @@
 package com.student.studentmanagment.Service.imp;
 
 import com.student.studentmanagment.Controller.StudentController;
+import com.student.studentmanagment.Model.Students;
 import com.student.studentmanagment.Service.StudentsService;
+import com.student.studentmanagment.dto.CourseDTO;
 import com.student.studentmanagment.dto.StudentDTO;
 import com.student.studentmanagment.repository.StudentRepository;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -35,6 +40,20 @@ public class StudentsServiceImp implements StudentsService {
 
     @Override
     public StudentDTO createStudent(StudentDTO studentDTO) {
-        return null;
+        log.info("saving student data");
+
+        Students students =mapper.map(studentDTO, Students.class);
+        Students saved = studentRepository.save(students);
+        return mapper.map(saved,StudentDTO.class);
+    }
+
+    @Override
+    public Page<StudentDTO> getStudents(int page, int size) {
+        log.info("list of Student from: {}",page);
+        PageRequest pageRequest= PageRequest.of(page,size, Sort.by(Sort.Direction.DESC,"id"));
+
+        //map() is used to transform elements in a stream
+        return studentRepository.findByActiveTrue(pageRequest)
+                .map(student -> mapper.map(student, StudentDTO.class));
     }
 }

@@ -6,13 +6,11 @@ import com.student.studentmanagment.dto.StudentDTO;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
@@ -35,8 +33,15 @@ public class StudentController {
     }
 
     @GetMapping("/list")
-    public String listStudent(){
+    public String listStudent(@RequestParam(defaultValue = "0")int page,
+                              @RequestParam(defaultValue = "5")int size,
+                              Model model,
+                              @RequestParam(value = "message",required = false) String message){
         log.info("Get /list -showing list students page");
+
+        Page<StudentDTO> students = studentsService.getStudents(page,size);
+        model.addAttribute("students",students);
+        model.addAttribute("message",message);
         return "students";
     }
 
@@ -58,6 +63,9 @@ public class StudentController {
             return "add-student";
         }
 
-        return "";
+        studentsService.createStudent(studentDTO);
+        redirectAttributes.addAttribute("message","Student is add successfully !!");
+
+        return "redirect:/students/list";
     }
 }
