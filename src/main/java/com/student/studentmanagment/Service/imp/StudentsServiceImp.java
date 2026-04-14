@@ -1,6 +1,7 @@
 package com.student.studentmanagment.Service.imp;
 
 import com.student.studentmanagment.Controller.StudentController;
+import com.student.studentmanagment.Model.Courses;
 import com.student.studentmanagment.Model.Students;
 import com.student.studentmanagment.Service.StudentsService;
 import com.student.studentmanagment.dto.CourseDTO;
@@ -55,5 +56,32 @@ public class StudentsServiceImp implements StudentsService {
         //map() is used to transform elements in a stream
         return studentRepository.findByActiveTrue(pageRequest)
                 .map(student -> mapper.map(student, StudentDTO.class));
+    }
+
+    @Override
+    public boolean existsByEmailIgnoreCaseAndIdNot(String email, Long id) {
+        log.info("email from update page:{}, id: {}",email,id);
+        return studentRepository.existsByEmailIgnoreCaseAndIdNot(email,id);
+    }
+
+    @Override
+    public StudentDTO getStudentById(Long id) {
+        Students students =studentRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("No Course Found"));
+
+        return mapper.map(students,StudentDTO.class);
+    }
+
+    @Override
+    public StudentDTO updateStudent(Long id, StudentDTO studentDTO) {
+        Students students =studentRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("No Student Found"));
+
+        mapper.map(studentDTO,students);
+        //-> mapper Internal call
+        //-> courses.setCourseCode(courseDTO.getCourseDTO());
+
+        Students updated =  studentRepository.save(students);
+        return mapper.map(updated,StudentDTO.class);
     }
 }

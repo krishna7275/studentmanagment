@@ -10,4 +10,10 @@ public interface StudentsService {
     StudentDTO createStudent(StudentDTO studentDTO);
 
     Page<StudentDTO> getStudents(int page, int size);
+
+    boolean existsByEmailIgnoreCaseAndIdNot(String email, Long id);
+
+    StudentDTO getStudentById(Long id);
+
+    StudentDTO updateStudent(Long id, StudentDTO studentDTO);
 }
