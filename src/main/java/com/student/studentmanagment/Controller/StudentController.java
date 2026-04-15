@@ -110,7 +110,7 @@ public class StudentController {
 
         log.info("Post /{id}/update - updated course successfully created.");
 
-        return "redirect:/student/list";
+        return "redirect:/students/list";
 
     }
 }
