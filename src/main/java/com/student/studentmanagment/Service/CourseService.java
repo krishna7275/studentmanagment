@@ -3,6 +3,8 @@ package com.student.studentmanagment.Service;
 import com.student.studentmanagment.dto.CourseDTO;
 import org.springframework.data.domain.Page;
 
+import java.util.List;
+
 public interface CourseService {
     CourseDTO createCourse(CourseDTO courseDTO);
 
@@ -15,4 +17,6 @@ public interface CourseService {
     CourseDTO getCourseById(Long id);
 
     CourseDTO updateCourse(Long id, CourseDTO courseDTO);
+
+    List<CourseDTO> getAllCourses();
 }

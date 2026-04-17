@@ -14,6 +14,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 
 @Service
 @Transactional //-> ye jo hai na vo ACID property kai jaise kaam kar ta hai
@@ -84,5 +87,12 @@ public class CourseServiceImpl implements CourseService {
 
         Courses updated =  courseRepository.save(courses);
         return mapper.map(updated,CourseDTO.class);
+    }
+
+    @Override
+    public List<CourseDTO> getAllCourses() {
+        return courseRepository.findByActiveTrue(Sort.by("courseName")).stream()
+                .map(courses -> mapper.map(courses,CourseDTO.class))
+                .collect(Collectors.toList());
     }
 }
