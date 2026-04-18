@@ -16,6 +16,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 @Transactional
 public class StudentsServiceImp implements StudentsService {
@@ -83,5 +86,12 @@ public class StudentsServiceImp implements StudentsService {
 
         Students updated =  studentRepository.save(students);
         return mapper.map(updated,StudentDTO.class);
+    }
+
+    @Override
+    public List<StudentDTO> getAllStudents() {
+        return studentRepository.findByActiveTrue().stream()
+                .map(students -> mapper.map(students,StudentDTO.class))
+                .collect(Collectors.toList());
     }
 }

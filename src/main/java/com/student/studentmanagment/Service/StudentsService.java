@@ -3,6 +3,8 @@ package com.student.studentmanagment.Service;
 import com.student.studentmanagment.dto.StudentDTO;
 import org.springframework.data.domain.Page;
 
+import java.util.List;
+
 public interface StudentsService {
 
     boolean existsByEmailIgnoreCase(String email);
@@ -16,4 +18,6 @@ public interface StudentsService {
     StudentDTO getStudentById(Long id);
 
     StudentDTO updateStudent(Long id, StudentDTO studentDTO);
+
+     List<StudentDTO> getAllStudents();
 }

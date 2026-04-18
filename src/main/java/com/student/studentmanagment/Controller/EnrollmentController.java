@@ -27,9 +27,11 @@ public class EnrollmentController {
 
     @GetMapping("/showEnroll")
     public String showEnroll(Model model){
-        log.info("Get /course/new - showing create course page.");
+        log.info("Get /course/new - showing Enrollment page.");
 
         model.addAttribute("enrollmentDto",new EnrollmentDTO());
+        model.addAttribute("courseList",courseService.getAllCourses());
+        model.addAttribute("studentList",studentsService.getAllStudents());
         return "enroll-course";
     }
 }
