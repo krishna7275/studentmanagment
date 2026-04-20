@@ -20,4 +20,5 @@ public interface StudentsService {
     StudentDTO updateStudent(Long id, StudentDTO studentDTO);
 
      List<StudentDTO> getAllStudents();
+
 }

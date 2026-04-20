@@ -5,17 +5,19 @@ import com.student.studentmanagment.Service.EnrollmentService;
 import com.student.studentmanagment.Service.StudentsService;
 import com.student.studentmanagment.dto.CourseDTO;
 import com.student.studentmanagment.dto.EnrollmentDTO;
+import com.student.studentmanagment.dto.EnrollmentSummaryDTO;
+import com.student.studentmanagment.dto.StudentDTO;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/enrollments")
@@ -44,9 +46,16 @@ public class EnrollmentController {
     }
 
     @GetMapping("/enrollmentList")
-    public String enrollmentList(Model model){
-        log.info("Get /enrollments/enrollmentList - showing Enrollment page.");
-        return "enroll-students";
+    public String enrollmentList(@RequestParam(defaultValue = "0")int page,
+                                 @RequestParam(defaultValue = "3")int size,
+                                 Model model,
+                                 @RequestParam(value = "message",required = false) String message){
+        log.info("Get /enrollmentList - list of enrolled students page");
+
+        Page<EnrollmentSummaryDTO> students = enrollmentService.getEnrolledStudents(page,size);
+        model.addAttribute("students",students);
+        model.addAttribute("message",message);
+        return "enrolled-students";
     }
 
     @PostMapping("/enrollCourse")
@@ -70,4 +79,16 @@ public class EnrollmentController {
 
         return "redirect:/enrollments/enrollmentList";
     }
+
+    @GetMapping("/getStudentEnrollmentDetails/{id}")
+    public String getStudentEnrollmentDetails(@PathVariable Long id, Model model
+                                              ){
+        Optional<EnrollmentSummaryDTO> enrollmentSummaryDTO
+                =enrollmentService.findEnrolledStudentsCourseDetails(id);
+        model.addAttribute("enrollmentSummaryDTO", enrollmentSummaryDTO);
+       // model.addAttribute("source", source);
+
+        return "enrollment-details";
+    }
+
 }
