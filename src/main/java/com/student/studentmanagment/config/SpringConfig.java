@@ -32,6 +32,7 @@ public class SpringConfig {
                         .defaultSuccessUrl("/dashboard",true)
                         .permitAll())
                 .logout(logout -> logout
+                        .logoutUrl("/logout")
                         .logoutSuccessUrl("/login?logout")
                         .permitAll());
        return http.build();

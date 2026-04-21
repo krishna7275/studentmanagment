@@ -120,5 +120,31 @@ public class EnrollmentServiceImp implements EnrollmentService {
                 });
     }
 
+    @Override
+    public List<EnrollmentSummaryDTO> getRecentlyEnrolledStudents() {
+        log.info("list of recently enrolled Student ");
+
+        PageRequest pageRequest= PageRequest.of(0,5, Sort.by(Sort.Direction.DESC,"id"));
+
+        //map() is used to transform elements in a stream
+        return studentRepository.findEnrolledStudents(pageRequest)
+                .map(student ->{
+                    EnrollmentSummaryDTO dto = new EnrollmentSummaryDTO();
+                    dto.setStudentId(student.getId());
+                    dto.setStudentName(student.getFirstName()+" "+student.getLastName());
+                    dto.setEmail(student.getEmail());
+
+                    dto.setCourseCount(student.getEnrollments().size());
+                    BigDecimal totalFee = student.getEnrollments().stream()
+                            .map(enrollment -> enrollment.getCourse().getFee())
+                            .filter(fee -> fee != null)
+                            .reduce(BigDecimal.ZERO,BigDecimal::add);
+                    dto.setTotalFee(totalFee);
+
+                    return dto;
+                })
+                .getContent();
+    }
+
 
 }
