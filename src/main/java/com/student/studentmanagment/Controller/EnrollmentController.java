@@ -81,11 +81,16 @@ public class EnrollmentController {
     }
 
     @GetMapping("/getStudentEnrollmentDetails/{id}")
-    public String getStudentEnrollmentDetails(@PathVariable Long id, Model model,
-                                              @RequestParam(defaultValue = "enrollments") String source){
-        Optional<EnrollmentSummaryDTO> enrollmentSummaryDTO
-                =enrollmentService.findEnrolledStudentsCourseDetails(id);
-        model.addAttribute("enrollmentSummaryDTO", enrollmentSummaryDTO);
+    public String getStudentEnrollmentDetails(
+            @PathVariable Long id,
+            Model model,
+            @RequestParam(defaultValue = "enrollments") String source){
+
+        EnrollmentSummaryDTO dto = enrollmentService
+                .findEnrolledStudentsCourseDetails(id)
+                .orElseThrow(() -> new RuntimeException("Student not found"));
+
+        model.addAttribute("enrollmentSummaryDTO", dto); // ✅ FIXED
         model.addAttribute("source", source);
 
         return "enrollment-details";
